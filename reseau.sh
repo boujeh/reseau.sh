@@ -1,145 +1,145 @@
 #!/bin/sh
 
-#creation d'un fichier interface
+#creation of an interface file
 clear
 while true;
 do
-read -p " voulez-vous crée une interface statique ou dynamique ? (s/d)" choix0 ;
+read -p "Do you want to create a static or dynamic interface? (s/d)" choix0 ;
 case $choix0 in 
 	d*|D* ) 
-        read -p "donner le nom de l'interface (périphérique): " interface ;
+        read -p "Give the name of the interface ( device) :" interface ;
         NEW_NAME=/etc/sysconfig/network-scripts/ifcfg-$interface ;
-        echo " le chem1 de votre interface est: $NEW_NAME" ;
+        echo "The way your config interface: $NEW_NAME" ;
         touch $NEW_NAME ;
-        echo "# Nom du périphérique" >> $NEW_NAME ;
+        echo "# Device Name" >> $NEW_NAME ;
         echo "DEVICE=$interface" >>$NEW_NAME ;
         while true ; 
         do
-          echo "Voulez-vous activer au démarage ? (y/n)";
-          read -p "Votre choix: " choix1 ;
+          echo "Do you want to activate at startup ? (y/n)";
+          read -p "Your choice: " choix1 ;
           case $choix1 in 
-        	    y*|Y*|o*|O* ) echo "#Activation au démarage" >> $NEW_NAME ;
+        	    y*|Y*|o*|O* ) echo "#Activate at startup" >> $NEW_NAME ;
 		                        echo "ONBOOT=yes" >> $NEW_NAME ; break;;
-	            n*|N* ) echo "#Activation au démarage" >> $NEW_NAME ;
+	            n*|N* ) echo "#Activate at startup" >> $NEW_NAME ;
 		                  echo "ONBOOT=no" >> $NEW_NAME ; break;;
-	            * ) echo "Votre choix n'est pas valide "   ;;
+	            * ) echo "Your choice is invalid"   ;;
           esac
           done
 
           while true ; 
           do
-          echo "c'est une interface LAN ou WAN ? (l/w) ";
-          read -p "Votre choix: " choix2 ;
+          echo "It is a LAN or WAN interface? (l/w)";
+          read -p "Your choice: " choix2 ;
           case $choix2 in
-	          l*|L* ) echo "#Non de l'interface" >> $NEW_NAME ;
+	          l*|L* ) echo "#Interface Name" >> $NEW_NAME ;
 		                echo "NAME=lan" >> $NEW_NAME ; break;;
-          	w*|W* ) echo "#Nom de l'interface" >> $NEW_NAME ;
+          	w*|W* ) echo "#Interface Name" >> $NEW_NAME ;
 		                echo "NAME=wan" >> $NEW_NAME ; break;;
-          	* ) echo "Votre choix n'est pas valide "  ;;
+          	* ) echo "Your choice is invalid"  ;;
           esac
           done
-          echo "votre adresse MAC est: "ifconfig | grep eth[0-9] | awk '{ print $NF}';
-          echo "#Adresse MAC de l'interface" >> $NEW_NAME ;
+          echo "Your MAC address is: "ifconfig | grep eth[0-9] | awk '{ print $NF}';
+          echo "#Your MAC address is" >> $NEW_NAME ;
           ifconfig | grep eth[0-9] | awk '{ print $NF}' >> $NEW_NAME ; 
 
-          echo "#Activation du DHCP" >> $NEW_NAME ;
+          echo "#Activating DHCP" >> $NEW_NAME ;
           echo "BOOTPROTO=dhcp" >> $NEW_NAME ;
-          echo " Le protocole DHCP a été activer";
+          echo " DHCP was activate";
           sleep 2;
           while true;
           do
-          read -p " voulez vous ajouter une adresse de routeur (Gateway) ?(y/n)" choix4
+          read -p "You want to add a router address ( Gateway ) ? (y/n)" choix4
           case $choix4 in
-            	y*|Y*|o*|O* ) echo "#Adresse du Gateway" >> $NEW_NAME ;
-	                        	read -p "votre adresse de gateway: " adresse ;
+            	y*|Y*|o*|O* ) echo "#Gateway Address" >> $NEW_NAME ;
+	                        	read -p "Your Gateway Address is: " adresse ;
 		                        echo "GATEWAY=$adresse" >> $NEW_NAME ; break ;;
-	            n*|N* ) echo "pas d'adresse de gateway" ; break ;;
-	            * ) echo "Votre choix n'est pas valide " ;;
+	            n*|N* ) echo "No gateway address" ; break ;;
+	            * ) echo "Your choice is invalid" ;;
           esac
           done
-          #activation de l'interface
+          #Interface activation
           while true; 
           do
-          read -p "voulez vous activer votre nouvelle interface ? (y/n)" activer
+          read -p "You want to activate your new interface? ( y / n)" activer
           case $activer in
           	y*|Y*|o*|O* ) ifup $interface ;
                     			dhclient; break ;;
-          	n*|N* ) echo "votre interface et ajouter mais n'est pas activer";
-	                	echo "le chemain du votre config interface est: $NEW_NAME"; break ;;
-          	* ) echo "Votre choix n'est pas valide "  ;;
+          	n*|N* ) echo "Your interface and add but is not activate";
+	                	echo "The way your config interface: $NEW_NAME"; break ;;
+          	* ) echo "Your choice is invalid"  ;;
            esac
           done
           #cat $NEW_NAME ;
-          echo "le chemain du votre config interface est $NEW_NAME";
-          echo "Merci !! et a bientôt. "; break ;;
-         #configuration d'une interface statique 
-      	s*|S* ) read -p "donner le nom de l'interface (périphérique): " interface ;
+          echo "The way of your config interface is: $NEW_NAME";
+          echo "Thank you !! and soon . "; break ;;
+         #configuring a static interface 
+      	s*|S* ) read -p "Give the name of the interface ( device) :" interface ;
                 NEW_NAME=/etc/sysconfig/network-scripts/ifcfg-$interface
-                echo " le chem1 de votre interface est: $NEW_NAME" ;
+                echo "The way of your config interface is: $NEW_NAME" ;
                 touch $NEW_NAME ;
-                echo "# Nom du périphérique" >> $NEW_NAME ;
+                echo "#Device Name" >> $NEW_NAME ;
                 echo "DEVICE=$interface" >>$NEW_NAME ;
                 while true ; 
                 do
-                echo "Voulez-vous activer au démarage ? (y/n)";
-                read -p "Votre choix: " choix1 ;
+                echo "Do you want to activate at startup ? (y/n)";
+                read -p "Your choice: " choix1 ;
                 case $choix1 in 
-                  	y*|Y*|o*|O* ) echo "#Activation au démarage" >> $NEW_NAME ;
+                  	y*|Y*|o*|O* ) echo "#Activate at startup" >> $NEW_NAME ;
 	                        	      echo "ONBOOT=yes" >> $NEW_NAME ; break;;
-                  	n*|N* ) echo "#Activation au démarage" >> $NEW_NAME ;
+                  	n*|N* ) echo "#Activate at startup" >> $NEW_NAME ;
                         		echo "ONBOOT=no" >> $NEW_NAME ; break;;
-                  	* ) echo "Votre choix n'est pas valide "   ;;
+                  	* ) echo "Your choice is invalid"   ;;
                 esac
                 done
                 while true ; 
                 do
-                echo "c'est une interface LAN ou WAN ? (l/w) ";
-                read -p "Votre choix: " choix2 ;
+                echo "It's a LAN or WAN interface? (l/w) ";
+                read -p "Your choice: " choix2 ;
                 case $choix2 in
-                  	l*|L* ) echo "#Non de l'interface" >> $NEW_NAME ;
+                  	l*|L* ) echo "#Device Name" >> $NEW_NAME ;
 	                        	echo "NAME=lan" >> $NEW_NAME ; break;;
-                  	w*|W* ) echo "#Nom de l'interface" >> $NEW_NAME ;
+                  	w*|W* ) echo "#Device Name" >> $NEW_NAME ;
                         		echo "NAME=wan" >> $NEW_NAME ; break;;
-                  	* ) echo "Votre choix n'est pas valide "  ;;
+                  	* ) echo "Your choice is invalid"   ;;
                 esac
                 done
-                echo "votre adresse MAC est: "ifconfig | grep eth[0-9] | awk '{ print $NF}';
-                echo "#Adresse MAC de l'interface" >> $NEW_NAME ;
+                echo "Your MAC address is : "ifconfig | grep eth[0-9] | awk '{ print $NF}';
+                echo "#Your MAC address is" >> $NEW_NAME ;
                 ifconfig | grep eth[0-9] | awk '{ print $NF}' >> $NEW_NAME ; 
-                #l'adresse ip de votre interface
-                read -p "donnez l'adresse ip de votre interface" ip
-                echo "#IP de linterface" >> $NEW_NAME ;
+                #The IP address of your interface
+                read -p "Give the IP address of your interface" ip
+                echo "#IP interface" >> $NEW_NAME ;
                 echo "IPADDR=$ip" >> $NEW_NAME ;
-                #le masque de sous réseau
-                read -p "donnez le masque de sous réseau" mask
-                echo "#Masque de sous réseau" >> $NEW_NAME ;
+                #the subnet mask
+                read -p "Give the subnet mask" mask
+                echo "#Subnet Mask" >> $NEW_NAME ;
                 echo "NETMASK=$mask" >> $NEW_NAME ;
-                #l'adresse ip de réseau
-                read -p "donnez l'adresse ip de réseau " ipr
-                echo "#IP de réseau" >> $NEW_NAME ;
+                #ip address network
+                read -p "Give the ip address network" ipr
+                echo "#IP network" >> $NEW_NAME ;
                 echo "NETWORK=$ipr" >> $NEW_NAME ;
-                #l'adresse ip Broadcast
-                read -p "donnez l'adresse ip Broadcast " ipb
-                echo "#IP de Broadcast" >> $NEW_NAME ;
+                #Broadcast IP address
+                read -p "Give the IP address Broadcast " ipb
+                echo "#IP Broadcast" >> $NEW_NAME ;
                 echo "BROADCAST=$ipb" >> $NEW_NAME ;
-                #l'adresse ip passerelle
-                read -p "donnez l'adresse ip passerelle " ipp
-                echo "#IP de passerelle" >> $NEW_NAME ;
+                #the gateway IP address
+                read -p "give the gateway ip address " ipp
+                echo "#the gateway ip address" >> $NEW_NAME ;
                 echo "GATEWAY=$ipp" >> $NEW_NAME ;
                 #activation de l'interface
                 while true; 
                 do
-                read -p "voulez vous activer votre nouvelle interface ? (y/n)" activer
+                read -p "You want to activate your new interface? ( y / n)" activer
                 case $activer in
                   	y*|Y*|o*|O* ) ifup $interface ; break ;;
-                  	n*|N* ) echo "votre interface et ajouter mais n'est pas activer";
-                        		echo "le chemain du votre config interface est: $NEW_NAME"; break ;;
-                  	* ) echo "Votre choix n'est pas valide "  ;;
+                  	n*|N* ) echo "Your interface and add but is not activate";
+                        		echo "The chemain of your config interface: $NEW_NAME"; break ;;
+                  	* ) echo "Your choice is invalid "  ;;
                 esac
                 done
                 cat $NEW_NAME ;
-                echo "Merci !! et a bientôt. "; break ;;
-        	*) echo "votre choix n'est valide" ;;
+                echo "Thank you !! and soon . "; break ;;
+        	*) echo "Your choice is invalid " ;;
 esac
 done
 exit 0
